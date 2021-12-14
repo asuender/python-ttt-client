@@ -3,6 +3,14 @@
 import socket
 import sys
 import threading
+import signal
+import random
+
+def interrupt_handler(signal, frame):
+    print("Exit.")
+    exit()
+
+signal.signal(signal.SIGINT, interrupt_handler)
 
 rendezvous = ('165.22.19.79', 55555)
 
@@ -10,6 +18,7 @@ rendezvous = ('165.22.19.79', 55555)
 print('connecting to rendezvous server')
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
 sock.bind(('0.0.0.0', 50001))
 sock.sendto(b'0', rendezvous)
 
